@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 
-function SearchBar() {
+function SearchBar({ type }) {
   const [textSearch, setTextSearch] = useState('');
-  const [searchItem, setSearchItem] = useState('');
   const [filterType, setFilterType] = useState('');
+  const [searchItem, setSearchItem] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     const fetchItem = async (url) => {
@@ -11,22 +13,35 @@ function SearchBar() {
       return data;
     };
 
-    if (filterType === 'ingredient') {
-      const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchItem}`;
+    if (typeFilter === 'ingredient') {
+      const url = type === 'Foods'
+        ? `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchItem}`
+        : `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchItem}`;
       fetchItem(url);
     }
-    if (filterType === 'name') {
-      const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchItem}`;
+    if (typeFilter === 'name') {
+      const url = type === 'Foods'
+        ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchItem}`
+        : `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchItem}`;
       fetchItem(url);
     }
-    if (filterType === 'letter') {
-      const url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchItem}`;
-      fetchItem(url);
-      if (filterType.length > 1) {
+    if (typeFilter === 'letter') {
+      if (searchItem.length > 1) {
         global.alert('Your search must have only 1 (one) character');
+      } else {
+        const url = type === 'Foods'
+          ? `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchItem}`
+          : `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchItem}`;
+        fetchItem(url);
       }
     }
-  }, [filterType, searchItem]);
+  }, [typeFilter, searchItem, type]);
+
+  const handleClick = () => {
+    setSearchItem(textSearch);
+    setTypeFilter(filterType);
+    setTextSearch('');
+  };
 
   return (
     <div className="search">
@@ -71,12 +86,16 @@ function SearchBar() {
       <button
         type="button"
         data-testid="exec-search-btn"
-        onClick={ () => setSearchItem(textSearch) }
+        onClick={ handleClick }
       >
         Search
       </button>
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  type: PropTypes.string,
+}.isRequired;
 
 export default SearchBar;

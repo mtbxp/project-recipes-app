@@ -25,7 +25,7 @@ function Header(props) {
 
   return (
     <header>
-      { showSearch && <SearchBar /> }
+      { showSearch && <SearchBar type={ title } /> }
       <div>
         <button
           type="button"
