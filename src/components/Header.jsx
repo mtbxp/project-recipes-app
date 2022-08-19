@@ -8,8 +8,7 @@ const contentsSearchIcon = ['/', 'foods', 'drinks'];
 function Header(props) {
   const [searchIcon, setSearchIcon] = useState(false);
   const [title, setTitle] = useState('');
-  const { location: { pathname } } = props;
-  console.log(props);
+  const { location: { pathname }, history } = props;
 
   useEffect(() => {
     const path = pathname.replace('/', '').replace('-', ' ');
@@ -25,7 +24,17 @@ function Header(props) {
   return (
     <header>
       <div>
-        <img src={ profile } alt="" data-testid="profile-top-btn" />
+        <button
+          type="button"
+          onClick={ () => { history.push('/profile'); } }
+          data-testid="btn-profile"
+        >
+          <img
+            src={ profile }
+            alt=""
+            data-testid="profile-top-btn"
+          />
+        </button>
         <p data-testid="page-title">{title}</p>
         { searchIcon && <img src={ search } alt="" data-testid="search-top-btn" /> }
       </div>
