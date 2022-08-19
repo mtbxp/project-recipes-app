@@ -1,8 +1,10 @@
 import React from 'react';
+import Header from '../components/Header';
 
-function Profile() {
+function Profile(props) {
   return (
     <div>
+      <Header { ...props } />
       Profile
     </div>);
 }
