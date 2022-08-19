@@ -4,11 +4,12 @@ import profile from '../images/profileIcon.svg';
 import search from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
 
-const contentsSearchIcon = ['/', 'foods', 'drinks'];
+const contentsSearchIcon = ['foods', 'drinks'];
 
 function Header(props) {
   const [searchIcon, setSearchIcon] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [type, setType] = useState('');
   const [title, setTitle] = useState('');
   const { location: { pathname }, history } = props;
 
@@ -16,6 +17,7 @@ function Header(props) {
     const path = pathname.replace('/', '').replace('-', ' ');
     if (contentsSearchIcon.includes(path)) {
       setSearchIcon(true);
+      setType(path);
     }
     const titleNew = path.toLowerCase().split(' ')
       .map((word) => word[0].toUpperCase() + word.slice(1))
@@ -25,7 +27,7 @@ function Header(props) {
 
   return (
     <header>
-      { showSearch && <SearchBar type={ title } /> }
+      { showSearch && <SearchBar type={ type } history={ history } /> }
       <div>
         <button
           type="button"
