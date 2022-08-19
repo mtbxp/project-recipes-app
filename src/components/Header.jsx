@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import profile from '../images/profileIcon.svg';
 import search from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 const contentsSearchIcon = ['/', 'foods', 'drinks'];
 
@@ -24,9 +25,7 @@ function Header(props) {
 
   return (
     <header>
-      <div className="search">
-        { showSearch && <input type="text" data-testid="search-input" /> }
-      </div>
+      { showSearch && <SearchBar /> }
       <div>
         <button
           type="button"
