@@ -11,7 +11,7 @@ test('', () => {
   expect(inputEmail).toBeInTheDocument();
 
   const inputPassword = screen.getByTestId('password-input');
-  userEvent.type(inputPassword, '123456');
+  userEvent.type(inputPassword, '123456789');
   expect(inputPassword).toBeInTheDocument();
 
   const enterButton = screen.getByTestId('login-submit-btn');

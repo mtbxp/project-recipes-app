@@ -7,7 +7,7 @@ function Login() {
 
   const history = useHistory();
 
-  const number6 = 6;
+  const number6 = 7;
 
   const validateButton = () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
