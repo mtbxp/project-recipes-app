@@ -7,6 +7,7 @@ const contentsSearchIcon = ['/', 'foods', 'drinks'];
 
 function Header(props) {
   const [searchIcon, setSearchIcon] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const [title, setTitle] = useState('');
   const { location: { pathname }, history } = props;
 
@@ -23,6 +24,9 @@ function Header(props) {
 
   return (
     <header>
+      <div className="search">
+        { showSearch && <input type="text" data-testid="search-input" /> }
+      </div>
       <div>
         <button
           type="button"
@@ -36,7 +40,15 @@ function Header(props) {
           />
         </button>
         <p data-testid="page-title">{title}</p>
-        { searchIcon && <img src={ search } alt="" data-testid="search-top-btn" /> }
+        { searchIcon && (
+          <button
+            type="button"
+            onClick={ () => { setShowSearch((prev) => !prev); } }
+            data-testid="btn-search"
+          >
+            <img src={ search } alt="" data-testid="search-top-btn" />
+          </button>
+        )}
       </div>
     </header>
   );

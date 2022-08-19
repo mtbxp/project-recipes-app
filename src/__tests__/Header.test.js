@@ -8,7 +8,7 @@ import App from '../App';
 const page = 'page-title';
 
 describe('test header component', () => {
-  it('header component not render in path /', () => {
+  it('header component contain correct info in path food', () => {
     render(
       <MemoryRouter initialEntries={ ['/foods'] }>
         <App />
@@ -21,7 +21,7 @@ describe('test header component', () => {
       .toContain('http://localhost/searchIcon.svg');
     expect(screen.getByTestId(page)).toHaveTextContent(/Foods/);
   });
-  it('header component not render in path /', () => {
+  it('header component buttons work', () => {
     const history = createMemoryHistory();
     history.push('/foods');
     render(
@@ -32,6 +32,8 @@ describe('test header component', () => {
 
     expect(screen.getByTestId(page)).toHaveTextContent(/Foods/);
 
+    userEvent.click(screen.getByTestId('btn-search'));
+    expect(screen.getByTestId('search-input')).toBeDefined();
     userEvent.click(screen.getByTestId('btn-profile'));
 
     expect(history.location.pathname).toEqual('/profile');
