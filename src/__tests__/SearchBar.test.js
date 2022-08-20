@@ -7,7 +7,9 @@ import App from '../App';
 
 beforeEach(() => {
   global.fetch = jest.fn(() => Promise.resolve({
-    json: () => Promise.resolve({ meals: [] }),
+    json: () => Promise.resolve({
+      meals: [{ idMeal: '52829' }], drinks: [{ idDrink: '11113' }],
+    }),
   }));
 
   global.alert = jest.fn(() => '');
@@ -16,6 +18,13 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks();
 });
+
+const btnSearch = 'btn-search';
+const searchInput = 'search-input';
+const nameSearchRadio = 'name-search-radio';
+const ingredientSearchRadio = 'ingredient-search-radio';
+const firstLetterSearchRadio = 'first-letter-search-radio';
+const execSearchBtn = 'exec-search-btn';
 
 describe('test header component', () => {
   it('search bar in /foods', () => {
@@ -27,13 +36,13 @@ describe('test header component', () => {
       </Router>,
     );
 
-    userEvent.click(screen.getByTestId('btn-search'));
-    const input = screen.getByTestId('search-input');
+    userEvent.click(screen.getByTestId(btnSearch));
+    const input = screen.getByTestId(searchInput);
     expect(input).toBeDefined();
-    const ingredient = screen.getByTestId('ingredient-search-radio');
-    const name = screen.getByTestId('name-search-radio');
-    const letter = screen.getByTestId('first-letter-search-radio');
-    const btn = screen.getByTestId('exec-search-btn');
+    const ingredient = screen.getByTestId(ingredientSearchRadio);
+    const name = screen.getByTestId(nameSearchRadio);
+    const letter = screen.getByTestId(firstLetterSearchRadio);
+    const btn = screen.getByTestId(execSearchBtn);
     expect(ingredient).toBeDefined();
     expect(name).toBeDefined();
     expect(letter).toBeDefined();
@@ -43,12 +52,13 @@ describe('test header component', () => {
 
     expect(fetch).toBeCalledTimes(1);
 
-    userEvent.click(name);
+    userEvent.click(letter);
     userEvent.click(btn);
 
     expect(fetch).toBeCalledTimes(2);
 
-    userEvent.click(letter);
+    userEvent.click(name);
+    userEvent.type(input, 'aa');
     userEvent.click(btn);
 
     const mgNum = 3;
@@ -60,6 +70,59 @@ describe('test header component', () => {
 
     expect(global.alert).toBeCalled();
   });
+  it('search bar redirect /food/52829', async () => {
+    const history = createMemoryHistory();
+    history.push('/foods');
+    render(
+      <Router history={ history }>
+        <App />
+      </Router>,
+    );
+
+    userEvent.click(screen.getByTestId(btnSearch));
+    const input = screen.getByTestId(searchInput);
+    expect(input).toBeDefined();
+    const name = screen.getByTestId(nameSearchRadio);
+    const btn = screen.getByTestId(execSearchBtn);
+
+    userEvent.click(name);
+    userEvent.type(input, 'Grilled Mac and Cheese');
+    userEvent.click(btn);
+
+    const tsec = 3000;
+    await new Promise((time) => setTimeout(time, tsec));
+
+    console.log(history);
+
+    expect(history.location.pathname).toBe('/foods/52829');
+  });
+
+  it('search bar redirect /drinks/52829', async () => {
+    const history = createMemoryHistory();
+    history.push('/drinks');
+    render(
+      <Router history={ history }>
+        <App />
+      </Router>,
+    );
+
+    userEvent.click(screen.getByTestId(btnSearch));
+    const input = screen.getByTestId(searchInput);
+    expect(input).toBeDefined();
+    const name = screen.getByTestId(nameSearchRadio);
+    const btn = screen.getByTestId(execSearchBtn);
+
+    userEvent.click(name);
+    userEvent.type(input, 'Bloody mary');
+    userEvent.click(btn);
+
+    const tsec = 3000;
+    await new Promise((time) => setTimeout(time, tsec));
+
+    console.log(history);
+
+    expect(history.location.pathname).toBe('/drinks/11113');
+  });
 
   it('search bar in /drinks', () => {
     const history = createMemoryHistory();
@@ -70,13 +133,13 @@ describe('test header component', () => {
       </Router>,
     );
 
-    userEvent.click(screen.getByTestId('btn-search'));
-    const input = screen.getByTestId('search-input');
+    userEvent.click(screen.getByTestId(btnSearch));
+    const input = screen.getByTestId(searchInput);
     expect(input).toBeDefined();
-    const ingredient = screen.getByTestId('ingredient-search-radio');
-    const name = screen.getByTestId('name-search-radio');
-    const letter = screen.getByTestId('first-letter-search-radio');
-    const btn = screen.getByTestId('exec-search-btn');
+    const ingredient = screen.getByTestId(ingredientSearchRadio);
+    const name = screen.getByTestId(nameSearchRadio);
+    const letter = screen.getByTestId(firstLetterSearchRadio);
+    const btn = screen.getByTestId(execSearchBtn);
     expect(ingredient).toBeDefined();
     expect(name).toBeDefined();
     expect(letter).toBeDefined();

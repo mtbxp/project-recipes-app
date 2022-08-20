@@ -27,7 +27,6 @@ function Header(props) {
 
   return (
     <header>
-      { showSearch && <SearchBar type={ type } history={ history } /> }
       <div>
         <button
           type="button"
@@ -50,6 +49,7 @@ function Header(props) {
             <img src={ search } alt="" data-testid="search-top-btn" />
           </button>
         )}
+        { showSearch && <SearchBar type={ type } history={ history } /> }
       </div>
     </header>
   );
