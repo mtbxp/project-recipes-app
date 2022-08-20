@@ -12,7 +12,11 @@ function SearchBar({ type, history }) {
     if (type === 'drinks') {
       const fetchItem = async (url) => {
         const data = await fetch(url).then((res) => res.json());
-        setRecipe(data.drinks);
+        const mgnum = 12;
+        const filtredData = data.drinks !== null && data.drinks.length > mgnum
+          ? data.drinks.filter((e) => data.drinks.indexOf(e) < mgnum)
+          : data.drinks;
+        setRecipe(filtredData);
       };
 
       if (typeFilter === 'ingredient') {
@@ -38,7 +42,11 @@ function SearchBar({ type, history }) {
     if (type === 'foods') {
       const fetchItem = async (url) => {
         const data = await fetch(url).then((res) => res.json());
-        setRecipe(data.meals);
+        const mgnum = 12;
+        const filtredData = data.meals !== null && data.meals.length > mgnum
+          ? data.meals.filter((e) => data.meals.indexOf(e) < mgnum)
+          : data.meals;
+        setRecipe(filtredData);
       };
       if (typeFilter === 'ingredient') {
         const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchItem}`;
@@ -129,13 +137,42 @@ function SearchBar({ type, history }) {
         </button>
       </header>
       <section>
-        {/* {
-          recipe.length > 1 && recipe.map((rec) => (
-            <div>
-
+        {
+          recipe !== null && type === 'drinks' && recipe.length > 1
+          && recipe.map((rec, index) => (
+            <div
+              data-testid={ `${index}-recipe-card` }
+              key={ `${index}-recipe-card` }
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ rec.strDrinkThumb }
+                alt={ rec.strDrink }
+              />
+              <h3 data-testid={ `${index}-card-name` }>
+                {rec.strDrink}
+              </h3>
             </div>
           ))
-        } */}
+        }
+        {
+          recipe !== null && type === 'foods' && recipe.length > 1
+          && recipe.map((rec, index) => (
+            <div
+              data-testid={ `${index}-recipe-card` }
+              key={ `${index}-recipe-card` }
+            >
+              <img
+                data-testid={ `${index}-card-img` }
+                src={ rec.strMealThumb }
+                alt={ rec.strMeal }
+              />
+              <h3 data-testid={ `${index}-card-name` }>
+                {rec.strMeal}
+              </h3>
+            </div>
+          ))
+        }
       </section>
     </div>
   );

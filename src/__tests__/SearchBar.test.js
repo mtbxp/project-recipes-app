@@ -26,7 +26,7 @@ const ingredientSearchRadio = 'ingredient-search-radio';
 const firstLetterSearchRadio = 'first-letter-search-radio';
 const execSearchBtn = 'exec-search-btn';
 
-describe('test header component', () => {
+describe('test searchBar component in /foods path', () => {
   it('search bar in /foods', () => {
     const history = createMemoryHistory();
     history.push('/foods');
@@ -68,7 +68,8 @@ describe('test header component', () => {
     userEvent.type(input, 'aa');
     userEvent.click(btn);
 
-    expect(global.alert).toBeCalled();
+    expect(global.alert)
+      .toBeCalledWith('Your search must have only 1 (one) character');
   });
   it('search bar redirect /food/52829', async () => {
     const history = createMemoryHistory();
@@ -92,11 +93,11 @@ describe('test header component', () => {
     const tsec = 3000;
     await new Promise((time) => setTimeout(time, tsec));
 
-    console.log(history);
-
     expect(history.location.pathname).toBe('/foods/52829');
   });
+});
 
+describe('test searchBar component in /drinks path', () => {
   it('search bar redirect /drinks/52829', async () => {
     const history = createMemoryHistory();
     history.push('/drinks');
@@ -118,8 +119,6 @@ describe('test header component', () => {
 
     const tsec = 3000;
     await new Promise((time) => setTimeout(time, tsec));
-
-    console.log(history);
 
     expect(history.location.pathname).toBe('/drinks/11113');
   });
@@ -166,5 +165,7 @@ describe('test header component', () => {
     userEvent.click(btn);
 
     expect(global.alert).toBeCalled();
+    expect(global.alert)
+      .toBeCalledWith('Your search must have only 1 (one) character');
   });
 });
