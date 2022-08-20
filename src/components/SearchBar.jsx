@@ -36,7 +36,7 @@ function SearchBar({ type, history }) {
         }
       }
     }
-  }, [typeFilter, searchItem]);
+  }, [typeFilter, searchItem, type]);
 
   useEffect(() => {
     if (type === 'foods') {
@@ -65,7 +65,7 @@ function SearchBar({ type, history }) {
         }
       }
     }
-  }, [typeFilter, searchItem]);
+  }, [typeFilter, searchItem, type]);
 
   useEffect(() => {
     if (recipe === null) {
@@ -79,7 +79,7 @@ function SearchBar({ type, history }) {
       const item = recipe[0].idDrink;
       history.push(`/${type}/${item}`);
     }
-  }, [recipe]);
+  }, [recipe, type]);
 
   const handleClick = () => {
     setSearchItem(textSearch);
