@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 function Recipe(props) {
@@ -6,6 +7,7 @@ function Recipe(props) {
     <div>
       <Header { ...props } />
       Recipe
+      <Footer />
     </div>);
 }
 

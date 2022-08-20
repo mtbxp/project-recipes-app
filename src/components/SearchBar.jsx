@@ -79,7 +79,7 @@ function SearchBar({ type, history }) {
       const item = recipe[0].idDrink;
       history.push(`/${type}/${item}`);
     }
-  }, [recipe, type]);
+  }, [recipe, type, history]);
 
   const handleClick = () => {
     setSearchItem(textSearch);
