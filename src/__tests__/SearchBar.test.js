@@ -143,6 +143,7 @@ describe('test searchBar component in /drinks path', () => {
     expect(name).toBeDefined();
     expect(letter).toBeDefined();
 
+    // test to pass
     userEvent.click(ingredient);
     userEvent.type(input, 'lemon');
     userEvent.click(btn);
