@@ -4,48 +4,20 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Router } from 'react-router-dom';
 import App from '../App';
+import mockedDrinks from './mock/drinks';
+import mockedMeals from './mock/meals';
 
 const mgnumdoze = 12;
 
 beforeEach(() => {
   global.fetch = jest.fn(() => Promise.resolve({
     json: () => Promise.resolve({
-      meals: [
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-        { idMeal: '52829' },
-        { idMeal: '77223' },
-      ],
-      drinks: [
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-        { idDrink: '11113' },
-        { idDrink: '12113' },
-      ],
+      ...mockedMeals,
+      ...mockedDrinks,
     }),
   }));
 
-  global.alert = jest.fn(() => 'Sorry, we haven\'t found any recipes for these filters.');
+  global.alert = jest.fn(() => '');
 });
 
 afterEach(() => {
@@ -80,7 +52,24 @@ describe('test searchBar component in /foods path', () => {
     const tsec = 3000;
     await new Promise((time) => setTimeout(time, tsec));
 
-    expect(screen.getAllByTestId(/-recipe-card/)).toHaveLength(mgnumdoze);
+    expect(screen.getAllByTestId(/recipe-card/)).toHaveLength(mgnumdoze);
+  });
+  it('searchbar cards /foods', async () => {
+    const history = createMemoryHistory();
+    history.push('/foods');
+    render(
+      <Router history={ history }>
+        <App />
+      </Router>,
+    );
+
+    const btn = screen.getByTestId(/category-filter/);
+    userEvent.click(btn);
+
+    const tsec = 3000;
+    await new Promise((time) => setTimeout(time, tsec));
+
+    expect(screen.getAllByTestId(/recipe-card/)).toHaveLength(mgnumdoze);
   });
 });
 
