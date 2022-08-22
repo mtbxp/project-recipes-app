@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import cardContext from '../context/cardContext';
 
 function Recipe(props) {
-  const { history } = props;
   const {
     type,
     recipe,
@@ -14,6 +12,8 @@ function Recipe(props) {
     setRecipe,
   } = useContext(cardContext);
   const [fetched, setFetched] = useState(false);
+  const [category, setCategory] = useState([]);
+  const [filtredCategory, setFiltredCategory] = useState('');
 
   useEffect(() => {
     setFetched(true);
@@ -29,40 +29,90 @@ function Recipe(props) {
     const fetchData = async (url, itemType) => {
       const mgnum = 12;
       const data = await fetch(url).then((item) => item.json());
-      console.log(data, itemType);
       const filtredData = data[itemType] !== null && data[itemType].length > mgnum
         ? data[itemType].filter((e) => data[itemType].indexOf(e) < mgnum)
         : data[itemType];
       setRecipe(filtredData);
     };
+    const fechCategory = async (url, itemType) => {
+      const data = await fetch(url).then((item) => item.json());
+      const mgnum = 5;
+      const filtredData = data[itemType] !== null && data[itemType].length > mgnum
+        ? data[itemType].filter((e) => data[itemType].indexOf(e) < mgnum)
+        : data[itemType];
+      setCategory(filtredData);
+    };
     if (type === 'foods') {
-      fetchData('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'meals');
+      const meals = 'meals';
+      fetchData('https://www.themealdb.com/api/json/v1/1/search.php?s=', meals);
+      fechCategory('https://www.themealdb.com/api/json/v1/1/list.php?c=list', meals);
     }
     if (type === 'drinks') {
-      fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'drinks');
+      const drinks = 'drinks';
+      fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', drinks);
+      fechCategory('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list', drinks);
     }
   }, [fetched]);
 
   useEffect(() => {
-    if (recipe === null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    const fetchData = async (url, itemType) => {
+      const data = await fetch(url).then((item) => item.json());
+      const mgnum = 12;
+      const filtredData = data[itemType] !== null && data[itemType].length > mgnum
+        ? data[itemType].filter((e) => data[itemType].indexOf(e) < mgnum)
+        : data[itemType];
+      console.log(filtredData);
+      setRecipe(filtredData);
+    };
+    if (type === 'foods') {
+      const meals = 'meals';
+      fetchData(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${filtredCategory}`, meals);
     }
-    if (recipe !== null && type === 'foods' && recipe.length === 1) {
-      const item = recipe[0].idMeal;
-      history.push(`/${type}/${item}`);
+    if (type === 'drinks') {
+      const drinks = 'drinks';
+      fetchData(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${filtredCategory}`, drinks);
     }
-    if (recipe !== null && type === 'drinks' && recipe.length === 1) {
-      const item = recipe[0].idDrink;
-      history.push(`/${type}/${item}`);
+  }, [filtredCategory]);
+
+  const toggleCategory = ({ target }) => {
+    const text = target.innerText;
+    if (filtredCategory === text) {
+      setFetched((prev) => !prev);
+    } else {
+      setFiltredCategory(text);
     }
-  }, [recipe, type, history]);
+  };
 
   return (
     <div>
       <Header { ...props } />
+      <header>
+        {
+          category.length > 1 && category.map((item) => (
+            <button
+              key={ `${item.strCategory}-key` }
+              type="button"
+              data-testid={ `${item.strCategory}-category-filter` }
+              onClick={ toggleCategory }
+            >
+              { item.strCategory }
+            </button>
+          ))
+        }
+        <button
+          key="all"
+          type="button"
+          data-testid="All-category-filter"
+          onClick={ () => {
+            setFetched((prev) => !prev);
+          } }
+        >
+          All
+        </button>
+      </header>
       <section>
         {
-          recipe !== null && type === 'drinks' && recipe.length > 1
+          recipe !== null && type === 'drinks'
           && recipe.map((rec, index) => (
             <div
               data-testid={ `${index}-recipe-card` }
@@ -80,7 +130,7 @@ function Recipe(props) {
           ))
         }
         {
-          recipe !== null && type === 'foods' && recipe.length > 1
+          recipe !== null && type === 'foods'
           && recipe.map((rec, index) => (
             <div
               data-testid={ `${index}-recipe-card` }
@@ -101,10 +151,5 @@ function Recipe(props) {
       <Footer />
     </div>);
 }
-
-Recipe.propTypes = {
-  history: PropTypes.shape,
-  location: PropTypes.shape,
-}.isRequired;
 
 export default Recipe;

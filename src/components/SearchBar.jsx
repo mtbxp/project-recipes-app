@@ -1,13 +1,15 @@
+import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useState } from 'react';
 import cardContext from '../context/cardContext';
 
-function SearchBar() {
+function SearchBar({ history }) {
   const {
     type,
     typeFilter,
     setTypeFilter,
     searchItem,
     setSearchItem,
+    recipe,
     setRecipe,
   } = useContext(cardContext);
   const [textSearch, setTextSearch] = useState('');
@@ -78,6 +80,20 @@ function SearchBar() {
     }
   }, [typeFilter, searchItem, type]);
 
+  useEffect(() => {
+    if (recipe === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    }
+    if (recipe !== null && type === 'foods' && recipe.length === 1) {
+      const item = recipe[0].idMeal;
+      history.push(`/${type}/${item}`);
+    }
+    if (recipe !== null && type === 'drinks' && recipe.length === 1) {
+      const item = recipe[0].idDrink;
+      history.push(`/${type}/${item}`);
+    }
+  }, [recipe, type, history]);
+
   return (
     <div className="search">
       <header>
@@ -130,5 +146,9 @@ function SearchBar() {
     </div>
   );
 }
+
+SearchBar.propTypes = {
+  history: PropTypes.shape,
+}.isRequired;
 
 export default SearchBar;
