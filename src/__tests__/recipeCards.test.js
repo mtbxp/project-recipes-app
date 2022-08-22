@@ -80,7 +80,7 @@ describe('test searchBar component in /foods path', () => {
     const tsec = 3000;
     await new Promise((time) => setTimeout(time, tsec));
 
-    expect(screen.getAllByTestId(/recipe-card/)).toHaveLength(mgnumdoze);
+    expect(screen.getAllByTestId(/-recipe-card/)).toHaveLength(mgnumdoze);
   });
 });
 
