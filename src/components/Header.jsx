@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import cardContext from '../context/cardContext';
 import profile from '../images/profileIcon.svg';
 import search from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
@@ -9,7 +10,7 @@ const contentsSearchIcon = ['foods', 'drinks'];
 function Header(props) {
   const [searchIcon, setSearchIcon] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [type, setType] = useState('');
+  const { setType } = useContext(cardContext);
   const [title, setTitle] = useState('');
   const { location: { pathname }, history } = props;
 
@@ -23,7 +24,7 @@ function Header(props) {
       .map((word) => word[0].toUpperCase() + word.slice(1))
       .join(' ');
     setTitle(titleNew);
-  }, [pathname]);
+  }, [pathname, setType]);
 
   return (
     <header>
@@ -49,7 +50,7 @@ function Header(props) {
             <img src={ search } alt="" data-testid="search-top-btn" />
           </button>
         )}
-        { showSearch && <SearchBar type={ type } history={ history } /> }
+        { showSearch && <SearchBar history={ history } /> }
       </div>
     </header>
   );

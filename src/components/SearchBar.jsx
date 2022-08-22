@@ -1,71 +1,17 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import cardContext from '../context/cardContext';
 
-function SearchBar({ type, history }) {
-  const [recipe, setRecipe] = useState([]);
+function SearchBar({ history }) {
+  const { type, setTypeFilter, setSearchItem, recipe } = useContext(cardContext);
   const [textSearch, setTextSearch] = useState('');
   const [filterType, setFilterType] = useState('');
-  const [searchItem, setSearchItem] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
 
-  useEffect(() => {
-    if (type === 'drinks') {
-      const fetchItem = async (url) => {
-        const data = await fetch(url).then((res) => res.json());
-        const mgnum = 12;
-        const filtredData = data.drinks !== null && data.drinks.length > mgnum
-          ? data.drinks.filter((e) => data.drinks.indexOf(e) < mgnum)
-          : data.drinks;
-        setRecipe(filtredData);
-      };
-
-      if (typeFilter === 'ingredient') {
-        const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${searchItem}`;
-        fetchItem(url);
-      }
-      if (typeFilter === 'name') {
-        const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchItem}`;
-        fetchItem(url);
-      }
-      if (typeFilter === 'letter') {
-        if (searchItem.length > 1) {
-          global.alert('Your search must have only 1 (one) character');
-        } else {
-          const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${searchItem}`;
-          fetchItem(url);
-        }
-      }
-    }
-  }, [typeFilter, searchItem, type]);
-
-  useEffect(() => {
-    if (type === 'foods') {
-      const fetchItem = async (url) => {
-        const data = await fetch(url).then((res) => res.json());
-        const mgnum = 12;
-        const filtredData = data.meals !== null && data.meals.length > mgnum
-          ? data.meals.filter((e) => data.meals.indexOf(e) < mgnum)
-          : data.meals;
-        setRecipe(filtredData);
-      };
-      if (typeFilter === 'ingredient') {
-        const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchItem}`;
-        fetchItem(url);
-      }
-      if (typeFilter === 'name') {
-        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchItem}`;
-        fetchItem(url);
-      }
-      if (typeFilter === 'letter') {
-        if (searchItem.length > 1) {
-          global.alert('Your search must have only 1 (one) character');
-        } else {
-          const url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchItem}`;
-          fetchItem(url);
-        }
-      }
-    }
-  }, [typeFilter, searchItem, type]);
+  const handleClick = () => {
+    setSearchItem(textSearch);
+    setTypeFilter(filterType);
+    setTextSearch('');
+  };
 
   useEffect(() => {
     if (recipe === null) {
@@ -80,12 +26,6 @@ function SearchBar({ type, history }) {
       history.push(`/${type}/${item}`);
     }
   }, [recipe, type, history]);
-
-  const handleClick = () => {
-    setSearchItem(textSearch);
-    setTypeFilter(filterType);
-    setTextSearch('');
-  };
 
   return (
     <div className="search">
@@ -179,7 +119,8 @@ function SearchBar({ type, history }) {
 }
 
 SearchBar.propTypes = {
-  type: PropTypes.string,
+  history: PropTypes.shape,
+  location: PropTypes.shape,
 }.isRequired;
 
 export default SearchBar;
