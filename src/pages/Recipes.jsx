@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import cardContext from '../context/cardContext';
@@ -61,7 +62,6 @@ function Recipe(props) {
       const filtredData = data[itemType] !== null && data[itemType].length > mgnum
         ? data[itemType].filter((e) => data[itemType].indexOf(e) < mgnum)
         : data[itemType];
-      console.log(filtredData);
       setRecipe(filtredData);
     };
     if (type === 'foods') {
@@ -88,7 +88,7 @@ function Recipe(props) {
       <Header { ...props } />
       <header>
         {
-          category.length > 1 && category.map((item) => (
+          category !== null && category.length > 1 && category.map((item) => (
             <button
               key={ `${item.strCategory}-key` }
               type="button"
@@ -114,37 +114,43 @@ function Recipe(props) {
         {
           recipe !== null && type === 'drinks'
           && recipe.map((rec, index) => (
-            <div
+            <Link
+              to={ `/${type}/${rec.idDrink}` }
               data-testid={ `${index}-recipe-card` }
               key={ `${index}-recipe-card` }
             >
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ rec.strDrinkThumb }
-                alt={ rec.strDrink }
-              />
-              <h3 data-testid={ `${index}-card-name` }>
-                {rec.strDrink}
-              </h3>
-            </div>
+              <div>
+                <img
+                  data-testid={ `${index}-card-img` }
+                  src={ rec.strDrinkThumb }
+                  alt={ rec.strDrink }
+                />
+                <h3 data-testid={ `${index}-card-name` }>
+                  {rec.strDrink}
+                </h3>
+              </div>
+            </Link>
           ))
         }
         {
           recipe !== null && type === 'foods'
           && recipe.map((rec, index) => (
-            <div
+            <Link
+              to={ `/${type}/${rec.idMeal}` }
               data-testid={ `${index}-recipe-card` }
               key={ `${index}-recipe-card` }
             >
-              <img
-                data-testid={ `${index}-card-img` }
-                src={ rec.strMealThumb }
-                alt={ rec.strMeal }
-              />
-              <h3 data-testid={ `${index}-card-name` }>
-                {rec.strMeal}
-              </h3>
-            </div>
+              <div>
+                <img
+                  data-testid={ `${index}-card-img` }
+                  src={ rec.strMealThumb }
+                  alt={ rec.strMeal }
+                />
+                <h3 data-testid={ `${index}-card-name` }>
+                  {rec.strMeal}
+                </h3>
+              </div>
+            </Link>
           ))
         }
       </section>
