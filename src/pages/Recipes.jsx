@@ -1,12 +1,47 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import cardContext from '../context/cardContext';
 
 function Recipe(props) {
   const { history } = props;
-  const { type, recipe } = useContext(cardContext);
+  const {
+    type,
+    recipe,
+    setSearchItem,
+    setTypeFilter,
+    setRecipe,
+  } = useContext(cardContext);
+  const [fetched, setFetched] = useState(false);
+
+  useEffect(() => {
+    setFetched(true);
+
+    return () => {
+      setSearchItem('');
+      setTypeFilter('');
+      setRecipe([]);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async (url, itemType) => {
+      const mgnum = 12;
+      const data = await fetch(url).then((item) => item.json());
+      console.log(data, itemType);
+      const filtredData = data[itemType] !== null && data[itemType].length > mgnum
+        ? data[itemType].filter((e) => data[itemType].indexOf(e) < mgnum)
+        : data[itemType];
+      setRecipe(filtredData);
+    };
+    if (type === 'foods') {
+      fetchData('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'meals');
+    }
+    if (type === 'drinks') {
+      fetchData('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'drinks');
+    }
+  }, [fetched]);
 
   useEffect(() => {
     if (recipe === null) {
