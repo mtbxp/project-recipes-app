@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import Recomendations from '../components/Recommendations';
+import './css/RecipeDetails.css';
 
 function RecipesDetails() {
+  const history = useHistory();
+  const location = useLocation();
+  const { id } = useParams();
+  const type = location.pathname.includes('drink') ? 'drinks' : 'foods';
+  const [recipeRecom, setRecipeRecom] = useState([]);
   const [recipe, setRecipe] = useState('');
   const [video, setVideo] = useState('');
   const [ingredients, setIngredients] = useState('');
-  const location = useLocation();
-  const { id } = useParams();
   const drinkEndpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const foodEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const nullNull = 'null - null';
+
   useEffect(() => {
     const fetchApi = async () => {
       let data = {};
-      if (location.pathname.includes('drink')) {
+      if (type === 'drinks') {
         const drinkResponse = await fetch(drinkEndpoint);
         data = await drinkResponse.json();
         setRecipe(data.drinks[0]);
@@ -23,14 +29,11 @@ function RecipesDetails() {
           .filter((measure) => measure[0].includes('strMeasure'));
         const ingredientsList = ingredientFilter
           .map((ingredient, index) => `${ingredient[1]} - ${measureFilter[index][1]}`);
-        console.log(ingredientsList);
         const filterIngredients = ingredientsList
           .filter((ingredient) => ingredient !== nullNull && ingredient !== 'null - ');
         setIngredients(filterIngredients);
-        console.log('ingredientes:', ingredientFilter);
-        console.log('measures:', measureFilter);
       }
-      if (location.pathname.includes('food')) {
+      if (type === 'foods') {
         const foodResponse = await fetch(foodEndpoint);
         data = await foodResponse.json();
         setRecipe(data.meals[0]);
@@ -48,10 +51,27 @@ function RecipesDetails() {
           .filter((ingredient) => ingredient !== nullNull && ingredient !== ' - ');
         setIngredients(filterIngredients);
       }
-      console.log(data);
     };
     fetchApi();
   }, []);
+
+  useEffect(() => {
+    const fetchRecom = async (url, dataType) => {
+      const res = await fetch(url);
+      const data = await res.json();
+      const mgnum = 6;
+      const filtredData = data[dataType].length > mgnum
+      && data[dataType].filter((e) => data[dataType].indexOf(e) < mgnum);
+      setRecipeRecom(filtredData);
+    };
+    if (type === 'foods') {
+      fetchRecom('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=', 'drinks');
+    }
+    if (type === 'drinks') {
+      fetchRecom('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'meals');
+    }
+  }, []);
+
   return (
     <div>
       {location.pathname.includes('drink') ? (
@@ -64,6 +84,7 @@ function RecipesDetails() {
           <img
             data-testid="recipe-photo"
             src={ recipe.strDrinkThumb }
+            className="hero"
             alt="imagem da receita"
           />
           <p data-testid="instructions">{recipe.strInstructions}</p>
@@ -78,6 +99,7 @@ function RecipesDetails() {
           <img
             data-testid="recipe-photo"
             src={ recipe.strMealThumb }
+            className="hero"
             alt="imagem da receita"
           />
           <p data-testid="instructions">{recipe.strInstructions}</p>
@@ -88,7 +110,6 @@ function RecipesDetails() {
           />
         </div>
       )}
-      ;
       <ul>
         {Array.isArray(ingredients) && ingredients.map((ingredient, index) => (
           (ingredient !== 'null - null' || ingredient !== '-')
@@ -102,10 +123,19 @@ function RecipesDetails() {
           )
         ))}
       </ul>
-      <div
-        data-testid={ `${0}-recomendation-card` }
-      />
-    </div>);
+      { recipeRecom.length > 1 && <Recomendations recipesRecom={ recipeRecom } />}
+      <div className="start-content">
+        <button
+          className="start"
+          type="button"
+          data-testid="start-recipe-btn"
+          onClick={ () => history.push(`/${type}/${id}/in-progress`) }
+        >
+          Start Recipe
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default RecipesDetails;
