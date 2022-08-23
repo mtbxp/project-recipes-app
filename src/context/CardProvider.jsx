@@ -7,6 +7,7 @@ function CardProvider({ children }) {
   const [searchItem, setSearchItem] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [recipe, setRecipe] = useState([]);
+  const [recipeDetail, setRecipeDetail] = useState([]);
 
   useEffect(() => {
     if (type === 'drinks') {
@@ -73,6 +74,8 @@ function CardProvider({ children }) {
     setSearchItem,
     setTypeFilter,
     recipe,
+    recipeDetail,
+    setRecipeDetail,
   };
 
   return (

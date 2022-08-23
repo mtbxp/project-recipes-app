@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import Recomendations from '../components/Recommendations';
+import ShareAndFavorite from '../components/ShareAndFavorite';
+import cardContext from '../context/cardContext';
 import './css/RecipeDetails.css';
 
 function RecipesDetails() {
@@ -8,6 +10,7 @@ function RecipesDetails() {
   const location = useLocation();
   const { id } = useParams();
   const type = location.pathname.includes('drink') ? 'drinks' : 'foods';
+  const { setRecipeDetail } = useContext(cardContext);
   const [recipeRecom, setRecipeRecom] = useState([]);
   const [recipe, setRecipe] = useState('');
   const [video, setVideo] = useState('');
@@ -17,42 +20,39 @@ function RecipesDetails() {
   const nullNull = 'null - null';
 
   useEffect(() => {
-    const fetchApi = async () => {
-      let data = {};
-      if (type === 'drinks') {
-        const drinkResponse = await fetch(drinkEndpoint);
-        data = await drinkResponse.json();
-        setRecipe(data.drinks[0]);
-        const ingredientFilter = Object.entries(data.drinks[0])
-          .filter((ingredient) => ingredient[0].includes('strIngredient'));
-        const measureFilter = Object.entries(data.drinks[0])
-          .filter((measure) => measure[0].includes('strMeasure'));
-        const ingredientsList = ingredientFilter
-          .map((ingredient, index) => `${ingredient[1]} - ${measureFilter[index][1]}`);
-        const filterIngredients = ingredientsList
-          .filter((ingredient) => ingredient !== nullNull && ingredient !== 'null - ');
-        setIngredients(filterIngredients);
+    const fetchApi = async (url, dataType) => {
+      const res = await fetch(url);
+      const data = await res.json();
+      const recipeData = data[dataType][0];
+
+      setRecipe(recipeData);
+      setRecipeDetail(recipeData);
+      console.log(recipeData);
+
+      if (dataType === 'meals') {
+        setVideo(recipeData.strYoutube.replace('watch?v=', 'embed/'));
       }
-      if (type === 'foods') {
-        const foodResponse = await fetch(foodEndpoint);
-        data = await foodResponse.json();
-        setRecipe(data.meals[0]);
-        setVideo(data.meals[0].strYoutube.replace('watch?v=', 'embed/'));
-        const ingredientFilter = Object.entries(data.meals[0])
-          .filter((ingredient) => ingredient[0].includes('strIngredient'));
-        console.log(ingredientFilter);
-        const measureFilter = Object.entries(data.meals[0])
-          .filter((measure) => measure[0].includes('strMeasure'));
-        console.log(measureFilter);
-        const ingredientsList = ingredientFilter
-          .map((ingredient, index) => `${ingredient[1]} - ${measureFilter[index][1]}`);
-        console.log(ingredientsList);
-        const filterIngredients = ingredientsList
-          .filter((ingredient) => ingredient !== nullNull && ingredient !== ' - ');
-        setIngredients(filterIngredients);
-      }
+
+      const ingredientFilter = Object.entries(recipeData)
+        .filter((ingredient) => ingredient[0].includes('strIngredient'));
+
+      const measureFilter = Object.entries(recipeData)
+        .filter((measure) => measure[0].includes('strMeasure'));
+
+      const ingredientsList = ingredientFilter
+        .map((ingredient, index) => `${ingredient[1]} - ${measureFilter[index][1]}`);
+
+      const filterIngredients = ingredientsList
+        .filter((ingredient) => ingredient !== nullNull && ingredient !== ' - ');
+
+      setIngredients(filterIngredients);
     };
-    fetchApi();
+    if (type === 'foods') {
+      fetchApi(foodEndpoint, 'meals');
+    }
+    if (type === 'drinks') {
+      fetchApi(drinkEndpoint, 'drinks');
+    }
   }, []);
 
   useEffect(() => {
@@ -76,7 +76,10 @@ function RecipesDetails() {
     <div>
       {location.pathname.includes('drink') ? (
         <div>
-          <h1 data-testid="recipe-title">{recipe.strDrink}</h1>
+          <div>
+            <h1 data-testid="recipe-title">{recipe.strDrink}</h1>
+            <ShareAndFavorite />
+          </div>
           <p data-testid="recipe-category">
             {' '}
             {recipe.strAlcoholic}
@@ -91,7 +94,10 @@ function RecipesDetails() {
         </div>
       ) : (
         <div>
-          <h1 data-testid="recipe-title">{recipe.strMeal}</h1>
+          <div>
+            <h1 data-testid="recipe-title">{recipe.strMeal}</h1>
+            <ShareAndFavorite />
+          </div>
           <p data-testid="recipe-category">
             {' '}
             {recipe.strCategory}
