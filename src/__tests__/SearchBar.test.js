@@ -50,19 +50,20 @@ describe('test searchBar component in /foods path', () => {
     userEvent.click(ingredient);
     userEvent.click(btn);
 
-    expect(fetch).toBeCalledTimes(1);
+    const mgNum1 = 3;
+    expect(fetch).toBeCalledTimes(mgNum1);
+
+    userEvent.click(name);
+    userEvent.click(btn);
+
+    const mgNum2 = 4;
+    expect(fetch).toBeCalledTimes(mgNum2);
 
     userEvent.click(letter);
     userEvent.click(btn);
 
-    expect(fetch).toBeCalledTimes(2);
-
-    userEvent.click(name);
-    userEvent.type(input, 'aa');
-    userEvent.click(btn);
-
-    const mgNum = 3;
-    expect(fetch).toBeCalledTimes(mgNum);
+    const mgNum3 = 5;
+    expect(fetch).toBeCalledTimes(mgNum3);
 
     userEvent.click(letter);
     userEvent.type(input, 'aa');
@@ -143,23 +144,24 @@ describe('test searchBar component in /drinks path', () => {
     expect(name).toBeDefined();
     expect(letter).toBeDefined();
 
-    // test to pass
     userEvent.click(ingredient);
     userEvent.type(input, 'lemon');
     userEvent.click(btn);
 
-    expect(fetch).toBeCalledTimes(1);
+    const mgNum1 = 3;
+    expect(fetch).toBeCalledTimes(mgNum1);
 
     userEvent.click(name);
     userEvent.click(btn);
 
-    expect(fetch).toBeCalledTimes(2);
+    const mgNum2 = 4;
+    expect(fetch).toBeCalledTimes(mgNum2);
 
     userEvent.click(letter);
     userEvent.click(btn);
 
-    const mgNum = 3;
-    expect(fetch).toBeCalledTimes(mgNum);
+    const mgNum3 = 5;
+    expect(fetch).toBeCalledTimes(mgNum3);
 
     userEvent.click(letter);
     userEvent.type(input, 'aa');
