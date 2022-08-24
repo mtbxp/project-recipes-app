@@ -18,7 +18,6 @@ function RecipesDetails() {
   const [ingredients, setIngredients] = useState('');
   const drinkEndpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const foodEndpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-  const nullNull = 'null - null';
 
   useEffect(() => {
     const fetchApi = async (url, dataType) => {
@@ -34,20 +33,19 @@ function RecipesDetails() {
         console.log(recipeData.strYoutube);
         setVideo(recipeData.strYoutube.replace('watch?v=', 'embed/'));
       }
-
       const ingredientFilter = Object.entries(recipeData)
-        .filter((ingredient) => ingredient[0].includes('strIngredient'));
+        .filter((ingredient) => ingredient[0].includes('strIngredient')
+      && ingredient[1] !== null && ingredient[1] !== '');
 
       const measureFilter = Object.entries(recipeData)
-        .filter((measure) => measure[0].includes('strMeasure'));
+        .filter((measure) => measure[0].includes('strMeasure')
+      && measure[1] !== null && measure[1] !== '');
 
       const ingredientsList = ingredientFilter
-        .map((ingredient, index) => `${ingredient[1]} - ${measureFilter[index][1]}`);
+        .map((ingredient, index) => (measureFilter[index][1] === null
+          ? `${ingredient[1]}` : `${ingredient[1]} - ${measureFilter[index][1]}`));
 
-      const filterIngredients = ingredientsList
-        .filter((ingredient) => ingredient !== nullNull && ingredient !== ' - ');
-
-      setIngredients(filterIngredients);
+      setIngredients(ingredientsList);
     };
     if (type === 'foods') {
       fetchApi(foodEndpoint, 'meals');

@@ -8,6 +8,7 @@ function CardProvider({ children }) {
   const [typeFilter, setTypeFilter] = useState('');
   const [recipe, setRecipe] = useState([]);
   const [recipeDetail, setRecipeDetail] = useState([]);
+  const [contextListIngredients, setContextListIngredients] = useState([]);
 
   const contextValue = {
     type,
@@ -20,6 +21,8 @@ function CardProvider({ children }) {
     setRecipe,
     recipeDetail,
     setRecipeDetail,
+    contextListIngredients,
+    setContextListIngredients,
   };
 
   return (
