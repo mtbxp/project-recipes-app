@@ -4,8 +4,8 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Router } from 'react-router-dom';
 import App from '../App';
-import mockedDrinks from './mock/drinks';
-import mockedMeals from './mock/meals';
+import { mockedDrinks } from './mock/drinks';
+import { mockedMeals } from './mock/meals';
 
 const mgnumdoze = 12;
 

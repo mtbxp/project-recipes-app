@@ -4,11 +4,12 @@ import { createMemoryHistory } from 'history';
 import React from 'react';
 import { Router } from 'react-router-dom';
 import App from '../App';
+import { meal } from './mock/meals';
 
 beforeEach(() => {
   global.fetch = jest.fn(() => Promise.resolve({
     json: () => Promise.resolve({
-      meals: [{ idMeal: '52829' }], drinks: [{ idDrink: '11113' }],
+      meals: [meal], drinks: [{ idDrink: '11113' }],
     }),
   }));
 
@@ -94,12 +95,12 @@ describe('test searchBar component in /foods path', () => {
     const tsec = 3000;
     await new Promise((time) => setTimeout(time, tsec));
 
-    expect(history.location.pathname).toBe('/foods/52829');
+    expect(history.location.pathname).toBe('/foods/52977');
   });
 });
 
 describe('test searchBar component in /drinks path', () => {
-  it('search bar redirect /drinks/52829', async () => {
+  it('search bar redirect /drinks/52977', async () => {
     const history = createMemoryHistory();
     history.push('/drinks');
     render(

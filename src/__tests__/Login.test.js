@@ -1,8 +1,8 @@
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import App from '../App';
-import { renderWithRouter } from './Helpers';
-import userEvent from '@testing-library/user-event'
+import renderWithRouter from './helpers/utils';
 
 test('', () => {
   const { history } = renderWithRouter(<App />);
@@ -16,5 +16,5 @@ test('', () => {
 
   const enterButton = screen.getByTestId('login-submit-btn');
   userEvent.click(enterButton);
-  expect(history.location.pathname).toBe('/foods')
+  expect(history.location.pathname).toBe('/foods');
 });
