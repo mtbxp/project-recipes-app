@@ -30,6 +30,7 @@ function RecipesDetails() {
       console.log(recipeData);
 
       if (dataType === 'meals') {
+        console.log(recipeData.strYoutube);
         setVideo(recipeData.strYoutube.replace('watch?v=', 'embed/'));
       }
 

@@ -5,7 +5,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import App from '../App';
 import mockedDrinks from './mock/drinks';
-import mockedMeals from './mock/meals';
+import { mockedMeals } from './mock/meals';
 
 const mgnumdoze = 12;
 
