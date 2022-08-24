@@ -11,6 +11,7 @@ export const mockedMeals = {
       idMeal: idMeal1,
       strMealThumb: strMealThumb1,
       strMeal: strMeal1,
+      strYoutube: 'https://www.youtube.com/watch?v=VVnZd8A84z4',
     },
     {
       idMeal: idMeal2,
