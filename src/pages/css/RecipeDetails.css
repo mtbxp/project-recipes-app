@@ -1,0 +1,18 @@
+.hero {
+  max-width: 300px;
+}
+
+.start-content {
+  align-items: center;
+  display: flex;
+}
+
+.start {
+  background-color: green;
+  bottom: 0;
+  box-sizing: border-box;
+  color: whitesmoke;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+}

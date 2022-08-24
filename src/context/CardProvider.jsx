@@ -7,6 +7,7 @@ function CardProvider({ children }) {
   const [searchItem, setSearchItem] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [recipe, setRecipe] = useState([]);
+  const [recipeDetail, setRecipeDetail] = useState([]);
 
   const contextValue = {
     type,
@@ -17,6 +18,8 @@ function CardProvider({ children }) {
     setTypeFilter,
     recipe,
     setRecipe,
+    recipeDetail,
+    setRecipeDetail,
   };
 
   return (
