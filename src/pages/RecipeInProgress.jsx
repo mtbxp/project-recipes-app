@@ -57,11 +57,10 @@ function RecipeInProgress() {
       <p data-testid="recipe-category" />
       { contextListIngredients.length > 0
       && contextListIngredients.map((ingredient, index) => (
-        <label key={ index } htmlFor={ index }>
+        <label key={ index } htmlFor={ index } data-testid={ `${index}-ingredient-step` }>
           <input
             id={ index }
             type="checkbox"
-            data-testid={ `${index}-ingredient-step` }
           />
           {ingredient}
         </label>
