@@ -1,32 +1,34 @@
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { Router } from 'react-router-dom';
 import App from '../App';
-import mockedDrinks from './mock/drinks';
-import { mockedMeals } from './mock/meals';
+import renderWithRouter from './helpers/utils';
+// import mockedDrinks from './mock/drinks';
+// import { mockedMeals } from './mock/meals';
 
-beforeEach(() => {
-  global.fetch = jest.fn(() => Promise.resolve({
-    json: () => Promise.resolve({
-      ...mockedMeals,
-      ...mockedDrinks,
-    }),
-  }));
+// beforeEach(() => {
+//   global.fetch = jest.fn(() => Promise.resolve({
+//     json: () => Promise.resolve({
+//       ...mockedMeals,
+//       ...mockedDrinks,
+//     }),
+//   }));
 
-  global.alert = jest.fn(() => '');
-});
+//   global.alert = jest.fn(() => '');
+// });
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
+// afterEach(() => {
+//   jest.clearAllMocks();
+// });
 
 describe('test recomendations', () => {
-  it('recomendations drink aparear 6', () => {
-    const history = createMemoryHistory();
-    history.push('/drinks');
-    render(
-      <Router history={ history }>
-        <App />
-      </Router>,
-    );
+  test('se recomendations drink aparece em 6', async () => {
+    const { history } = renderWithRouter(<App />);
+    history.push('/foods/52977');
+    const gg = await screen.findByTestId('0-recomendation-title');
+    expect(gg).toBeInTheDocument();
+    userEvent.click(gg);
+    expect(history.location.pathname).toBe('/drinks/15997');
   });
+  test('se se recomendations food aparece em 6 ');
 });

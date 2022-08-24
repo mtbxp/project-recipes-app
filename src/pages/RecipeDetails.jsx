@@ -13,6 +13,7 @@ function RecipesDetails() {
   const { setRecipeDetail } = useContext(cardContext);
   const [recipeRecom, setRecipeRecom] = useState([]);
   const [recipe, setRecipe] = useState('');
+  const [startContinue, setStartContinue] = useState('Start Recipe');
   const [video, setVideo] = useState('');
   const [ingredients, setIngredients] = useState('');
   const drinkEndpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -72,6 +73,34 @@ function RecipesDetails() {
       fetchRecom('https://www.themealdb.com/api/json/v1/1/search.php?s=', 'meals');
     }
   }, []);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (data === null) {
+      return localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails: {},
+        meals: {} }));
+    }
+    if (type === 'foods') {
+      const mealData = Object.keys(data.meals).includes(id);
+      if (mealData) setStartContinue('Continue Recipe');
+      console.log(mealData);
+    } else {
+      const drinkData = Object.keys(data.cocktails).includes(id);
+      if (drinkData) setStartContinue('Continue Recipe');
+      console.log(drinkData);
+    }
+  }, []);
+  const handleClick = () => {
+    history.push(`/${type}/${id}/in-progress`);
+    let prevData = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    prevData = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (type === 'foods') {
+      prevData.meals[id] = [];
+    } else {
+      prevData.cocktails[id] = [];
+    }
+    localStorage.setItem('inProgressRecipes', JSON.stringify(prevData));
+  };
 
   return (
     <div>
@@ -136,9 +165,9 @@ function RecipesDetails() {
           className="start"
           type="button"
           data-testid="start-recipe-btn"
-          onClick={ () => history.push(`/${type}/${id}/in-progress`) }
+          onClick={ handleClick }
         >
-          Start Recipe
+          { startContinue }
         </button>
       </div>
     </div>
