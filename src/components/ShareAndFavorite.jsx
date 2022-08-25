@@ -15,7 +15,9 @@ function ShareAndFavorite() {
   const type = pathname.includes('drink') ? 'Drink' : 'Food';
 
   const handleClick = () => {
-    clipboardCopy(`http://localhost:3000${pathname}`);
+    const newPathname = pathname.replace('/in-progress', '');
+    console.log(newPathname, pathname);
+    clipboardCopy(`http://localhost:3000${newPathname}`);
     setCopied(true);
   };
 
