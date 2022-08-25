@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import cardContext from '../context/cardContext';
+import './css/RecipeDetails.css';
 
 function Recipe(props) {
   const {
@@ -124,6 +125,7 @@ function Recipe(props) {
                   data-testid={ `${index}-card-img` }
                   src={ rec.strDrinkThumb }
                   alt={ rec.strDrink }
+                  className="hero"
                 />
                 <h3 data-testid={ `${index}-card-name` }>
                   {rec.strDrink}
@@ -145,6 +147,7 @@ function Recipe(props) {
                   data-testid={ `${index}-card-img` }
                   src={ rec.strMealThumb }
                   alt={ rec.strMeal }
+                  className="hero"
                 />
                 <h3 data-testid={ `${index}-card-name` }>
                   {rec.strMeal}

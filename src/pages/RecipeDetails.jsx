@@ -38,12 +38,13 @@ function RecipesDetails() {
       && ingredient[1] !== null && ingredient[1] !== '');
 
       const measureFilter = Object.entries(recipeData)
-        .filter((measure) => measure[0].includes('strMeasure')
-      && measure[1] !== null && measure[1] !== '');
+        .filter((measure) => measure[0].includes('strMeasure'));
 
+      console.log(measureFilter);
+      console.log(ingredientFilter);
       const ingredientsList = ingredientFilter
-        .map((ingredient, index) => (measureFilter[index][1] === null
-          ? `${ingredient[1]}` : `${ingredient[1]} - ${measureFilter[index][1]}`));
+        .map((ingredient, index) => (`${ingredient[1]} - ${
+          measureFilter[index][1] === null ? '' : measureFilter[index][1]}`));
 
       setIngredients(ingredientsList);
     };
@@ -81,11 +82,9 @@ function RecipesDetails() {
     if (type === 'foods') {
       const mealData = Object.keys(data.meals).includes(id);
       if (mealData) setStartContinue('Continue Recipe');
-      console.log(mealData);
     } else {
       const drinkData = Object.keys(data.cocktails).includes(id);
       if (drinkData) setStartContinue('Continue Recipe');
-      console.log(drinkData);
     }
   }, []);
   const handleClick = () => {
