@@ -36,22 +36,29 @@ Nesse projeto, você será capaz de:
 ## Executando a aplicação
 
 1. Clone o repositório
-- `git@github.com:mtbxp/project-recipes-app.git`
+  ```
+git@github.com:mtbxp/project-recipes-app.git
+```
 
 2. Entre na pasta do projeto
-- `cd project-recipes-app`
+```
+cd recipes-app
+```
 
 3. Instale as dependências e inicialize o projeto
 
 - Instale as dependências:
-  - `npm install`
-- Inicialize o projeto:
-  - `npm start` (uma nova página deve abrir no seu navegador com um texto simples)
+```
+npm install
+```
+ * Inicialize o projeto:
+```
+npm start` (uma nova página deve abrir no seu navegador com um texto simples)
+```
 
 ## Executando Testes
 
-* Para rodar todos os testes:
-
+ * Para rodar todos os testes:
   ```
-    npm test
+  npm test
   ```
