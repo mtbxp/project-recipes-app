@@ -53,8 +53,9 @@ npm install
 ```
  * Inicialize o projeto:
 ```
-npm start` (uma nova página deve abrir no seu navegador com um texto simples)
+npm start 
 ```
+ (uma nova página deve abrir no seu navegador com um texto simples)
 
 ## Executando Testes
 
